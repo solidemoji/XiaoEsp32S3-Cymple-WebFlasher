@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xiao ESP32 S3 Cymple Mouth Tracker Flasher</title>
+    <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+    
+    <style>
+        :root {
+            --primary: #0071e3;
+            --secondary: #424245;
+            --warning: #ff9f0a;
+            --bg: #f5f5f7;
+            --text: #1d1d1f;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, system-ui, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #ffffff;
+            width: 850px;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 40px;
+            position: relative;
+        }
+
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #e5e5ea;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        h1 { margin: 0 0 20px 0; font-size: 24px; line-height: 1.3; }
+        
+        .mode-hint { font-size: 13px; color: #86868b; margin-bottom: 20px; line-height: 1.6; }
+
+        .btn-group { display: flex; flex-direction: column; gap: 16px; }
+
+        .flash-btn {
+            width: 100%; height: 72px; border: none; border-radius: 14px;
+            font-size: 17px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; padding: 0 24px; color: white;
+            justify-content: center; transition: transform 0.2s, opacity 0.2s;
+        }
+        .btn-blue { background: var(--primary); }
+        .btn-dark { background: var(--secondary); } 
+        .flash-btn:hover { opacity: 0.9; transform: scale(1.02); }
+
+        .sidebar { background: #f2f2f7; padding: 25px; border-radius: 18px; font-size: 14px; line-height: 1.6; }
+        .step { margin-bottom: 25px; }
+        .step b { display: block; margin-bottom: 6px; color: #000; font-size: 15px; }
+        .notice-box { 
+            background: #fff3cd; 
+            border-left: 4px solid var(--warning); 
+            padding: 12px; 
+            margin-bottom: 20px; 
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        .important { color: #d63031; font-weight: bold; }
+
+        [lang="en"] .zh, [lang="zh"] .en { display: none; }
+    </style>
+</head>
+<body lang="zh">
+
+<div class="container">
+    <button class="lang-switch" onclick="toggleLang()">English / 中文</button>
+
+    <div class="main">
+        <h1 class="zh">Xiao ESP32 S3 Cymple 嘴部追踪 固件刷写</h1>
+        <h1 class="en">Xiao ESP32 S3 Cymple Mouth Tracker Flasher</h1>
+
+        <!-- 模式选择提示 -->
+        <div class="mode-hint">
+            <span class="zh">💡 <b>模式选择指南：</b> <b>无线版</b>通过 WiFi 将画面传给 CympleApp（需先配网）；<b>有线版</b>插上 USB 即可直接使用，画面经数据线传输，延迟更低、更稳定。</span>
+            <span class="en">💡 <b>Mode Guide:</b> <b>Wireless</b> streams over WiFi to CympleApp (WiFi setup required); <b>Wired</b> works right after plugging in USB - frames go through the cable for lower latency & stability.</span>
+        </div>
+
+        <div class="btn-group">
+            <!-- 无线版按钮 -->
+            <esp-web-install-button manifest="./manifest_wireless.json">
+                <button slot="activate" class="flash-btn btn-blue">
+                    <span class="zh">📡 刷入 Cymple 嘴部追踪 (无线版)</span>
+                    <span class="en">📡 Flash Cymple Mouth Tracker (Wireless)</span>
+                </button>
+            </esp-web-install-button>
+
+            <!-- 有线版按钮 -->
+            <esp-web-install-button manifest="./manifest_wire.json">
+                <button slot="activate" class="flash-btn btn-dark">
+                    <span class="zh">🔌 刷入 Cymple 嘴部追踪 (有线 USB 版)</span>
+                    <span class="en">🔌 Flash Cymple Mouth Tracker (Wired USB)</span>
+                </button>
+            </esp-web-install-button>
+        </div>
+        
+        <p style="margin-top: 40px; font-size: 12px; color: #b2bec3; text-align: center;">
+            Chrome / Edge / Opera Recommended
+        </p>
+    </div>
+
+    <div class="sidebar">
+        <div class="notice-box">
+            <b class="zh" style="color: var(--warning);">⚠️ 刷写前注意</b>
+            <b class="en" style="color: var(--warning);">⚠️ Before Flashing</b>
+            <p class="zh" style="margin-bottom: 0;">本固件适用于 <b>Seeed Studio XIAO ESP32-S3 Sense</b>（带官方摄像头扩展板）。请确认你的硬件型号再刷写。</p>
+            <p class="en" style="margin-bottom: 0;">This firmware is for the <b>Seeed Studio XIAO ESP32-S3 Sense</b> (with official camera daughterboard). Verify your hardware before flashing.</p>
+        </div>
+
+        <div class="step">
+            <b class="zh">1. 物理连接</b><b class="en">1. Connection</b>
+            <p class="zh">使用数据线将 Xiao ESP32 S3 Sense 接入电脑。</p>
+            <p class="en">Connect Xiao ESP32 S3 Sense via USB cable.</p>
+        </div>
+        
+        <div class="step">
+            <b class="zh">2. 固件烧录</b><b class="en">2. Flashing</b>
+            <p class="zh">根据需求选择 <b>无线版</b> 或 <b>有线版</b>。建议勾选 <mark>Erase device</mark> 以确保旧数据被彻底清除。</p>
+            <p class="en">Pick <b>Wireless</b> or <b>Wired</b> version. Checking <mark>Erase device</mark> is recommended.</p>
+        </div>
+
+        <div class="step">
+            <b class="zh important">3. 使用</b>
+            <b class="en important">3. Usage</b>
+            <p class="zh">无线版：连接热点 <b>Cymple_Face</b> → 打开 <b>192.168.4.1</b> 配网；有线版：插 USB 打开 <b>CympleApp</b> 即可。</p>
+            <p class="en">Wireless: join AP <b>Cymple_Face</b> → open <b>192.168.4.1</b> to set WiFi; Wired: plug USB & open <b>CympleApp</b>.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleLang() {
+        const body = document.body;
+        body.lang = body.lang === 'zh' ? 'en' : 'zh';
+    }
+</script>
+
+</body>
+</html>

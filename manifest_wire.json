@@ -1,0 +1,16 @@
+{
+  "name": "Cymple Mouth Tracker (XIAO ESP32-S3) - Wired USB",
+  "version": "1.0.0",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        { "path": "bootloader.bin", "offset": 0 },
+        { "path": "partition-table.bin", "offset": 32768 },
+        { "path": "ota_data_initial.bin", "offset": 53248 },
+        { "path": "cymple-mouth-wire.bin", "offset": 65536 }
+      ]
+    }
+  ]
+}
